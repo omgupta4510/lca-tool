@@ -7,6 +7,5 @@ RUN npm install
 
 COPY . .
 
-EXPOSE 3000
-
-CMD ["npm", "run", "dev"]
+RUN npm install -g serve
+CMD ["serve", "-s", "dist", "-l", "4173"]
