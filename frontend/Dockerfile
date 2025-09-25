@@ -8,11 +8,10 @@ RUN npm install
 COPY . .
 
 RUN npm run build
-ENV HOST=0.0.0.0
+# Install 'serve' globally to serve built files
+RUN npm install -g serve
 
-
-# Expose port
 EXPOSE 3000
 
-# Use preview server for production
-CMD ["npm", "run", "preview", "--", "--port", "3000"]
+# Serve the dist folder
+CMD ["serve", "-s", "dist", "-l", "3000"]
