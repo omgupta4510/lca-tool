@@ -1,0 +1,21 @@
+{
+  "name": "lca-tool",
+  "version": "1.0.0",
+  "description": "AI-Powered Life Cycle Assessment Tool",
+  "main": "index.js",
+  "scripts": {
+    "dev": "concurrently \"npm run backend\" \"npm run frontend\" \"npm run ai-processor\"",
+    "backend": "cd backend && npm run dev",
+    "frontend": "cd frontend && npm run dev",
+    "ai-processor": "cd ai-processor && python app.py",
+    "build": "cd frontend && npm run build",
+    "start": "cd backend && npm start",
+    "install-all": "npm install && cd frontend && npm install && cd ../backend && npm install && cd ../ai-processor && pip install -r requirements.txt"
+  },
+  "keywords": ["lca", "environment", "ai", "sustainability"],
+  "author": "LCA Team",
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}

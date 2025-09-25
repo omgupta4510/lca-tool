@@ -1,0 +1,11 @@
+material_type,quantity,unit,energy_consumption,transport_distance
+Steel,100,kg,50,200
+Aluminum,25,kg,150,500
+PET Plastic,15,kg,30,100
+Concrete,500,kg,10,50
+Glass,20,kg,40,300
+Paper,10,kg,20,150
+Copper,5,kg,80,400
+Wood,75,kg,15,100
+Cotton,8,kg,60,250
+Polyester,12,kg,90,350
