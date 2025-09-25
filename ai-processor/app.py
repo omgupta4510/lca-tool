@@ -13,7 +13,7 @@ import logging
 load_dotenv()
 
 app = Flask(__name__)
-CORS(app)
+# CORS(app)
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
