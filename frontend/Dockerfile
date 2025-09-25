@@ -7,6 +7,11 @@ RUN npm install
 
 COPY . .
 
+# Build the application
+RUN npm run build
+
+# Expose port 3000
 EXPOSE 3000
 
-CMD ["npm", "run", "dev"]
+# Use preview command to serve built files on port 3000
+CMD ["npm", "run", "preview", "--", "--host", "0.0.0.0", "--port", "3000"]
