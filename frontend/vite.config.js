@@ -14,7 +14,7 @@ export default defineConfig({
     }
   },
   preview: {
-    host: '0.0.0.0',
+    host: 'lcatool.me',
     port: 3000,
     strictPort: true
   },
