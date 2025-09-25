@@ -9,7 +9,11 @@ import { dataAPI, aiAPI, lcaAPI } from '../services/api'
 
 const DataInputPage = () => {
   const navigate = useNavigate()
-  const { materials, setMaterials, addMaterial, updateMaterial, removeMaterial, clearMaterials, setLoading, loading, setResults } = useLCA()
+  const { materials: contextMaterials, setMaterials, addMaterial, updateMaterial, removeMaterial, clearMaterials, setLoading, loading, setResults } = useLCA()
+  
+  // Ensure materials is always an array
+  const materials = contextMaterials || []
+  
   const [inputMethod, setInputMethod] = useState('manual') // 'csv' or 'manual'
   const [uploadedFile, setUploadedFile] = useState(null)
   const [validationErrors, setValidationErrors] = useState([])
@@ -29,10 +33,14 @@ const DataInputPage = () => {
 
     try {
       const result = await dataAPI.uploadCSV(file)
-      setMaterials(result.data)
-      toast.success(`Processed ${result.total_records} materials from CSV`)
+      if (result?.data && Array.isArray(result.data)) {
+        setMaterials(result.data)
+        toast.success(`Processed ${result.total_records || result.data.length} materials from CSV`)
+      } else {
+        throw new Error('Invalid data format received from server')
+      }
       
-      if (result.warnings && result.warnings.length > 0) {
+      if (result.warnings && Array.isArray(result.warnings) && result.warnings.length > 0) {
         result.warnings.forEach(warning => toast.error(warning, { icon: '⚠️' }))
       }
     } catch (error) {
@@ -108,12 +116,19 @@ const DataInputPage = () => {
     setLoading(true)
     try {
       const result = await aiAPI.processData(materials, processingOptions)
-      setMaterials(result.data)
+      if (result?.data) {
+        setMaterials(result.data)
+      }
       
-      toast.success(`AI processing complete! ${result.processing_summary.missing_data_detected} fields imputed`)
+      // Safe access to processing summary
+      const processingSummary = result?.processing_summary || {}
+      const missingDataCount = processingSummary.missing_data_detected || 0
+      const outliersCount = processingSummary.outliers_detected || 0
       
-      if (result.processing_summary.outliers_detected > 0) {
-        toast.error(`${result.processing_summary.outliers_detected} potential outliers detected`, { icon: '⚠️' })
+      toast.success(`AI processing complete! ${missingDataCount} fields imputed`)
+      
+      if (outliersCount > 0) {
+        toast.error(`${outliersCount} potential outliers detected`, { icon: '⚠️' })
       }
     } catch (error) {
       console.warn('AI processing failed, using fallback:', error)
